@@ -85,7 +85,7 @@ export async function POST(req: Request) {
     const result = await streamText({
       model: google("gemini-2.5-flash"),
       system: CARBON_SYSTEM_PROMPT,
-      messages: messages as Parameters<typeof streamText>[0]["messages"],
+      messages: messages as any,
     });
 
     return result.toUIMessageStreamResponse();
