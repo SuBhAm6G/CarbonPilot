@@ -41,12 +41,35 @@ function normalizeMessages(messages: Array<Record<string, unknown>>): Array<{ ro
   });
 }
 
+import { z } from "zod";
+
+const messageSchema = z.object({
+  role: z.enum(["user", "assistant"]),
+  content: z.union([
+    z.string(),
+    z.array(z.object({ type: z.string().optional(), text: z.string().optional() }).passthrough())
+  ]),
+  parts: z.array(z.object({ type: z.string().optional(), text: z.string().optional() }).passthrough()).optional(),
+}).passthrough();
+
+const chatRequestSchema = z.object({
+  messages: z.array(messageSchema).max(50), // Prevent massive payloads
+});
+
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const rawBody = await req.json();
+    
+    // Security: Strict validation of incoming payload
+    const parsedBody = chatRequestSchema.safeParse(rawBody);
+    if (!parsedBody.success) {
+      return new Response(
+        JSON.stringify({ error: "Invalid request payload format." }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
 
-    // AI SDK v6 sends messages under the "messages" key
-    const rawMessages = body.messages ?? [];
+    const rawMessages = parsedBody.data.messages;
     const normalized = normalizeMessages(rawMessages);
 
     // Filter to only valid user/assistant messages with content
