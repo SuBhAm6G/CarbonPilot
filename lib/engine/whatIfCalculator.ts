@@ -22,7 +22,7 @@ export type SimulatorScenarioKey =
   | "switch_to_ev"
   | "become_vegetarian"
   | "become_vegan"
-  | "reduce_beef"
+  | "reduce_mutton"
   | "work_from_home_2days"
   | "renewable_energy"
   | "reduce_flights";
@@ -106,7 +106,7 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
       for (const a of activities) {
         if (a.activityType === "food") {
           const d = a.details as { mealType: string; servings: number };
-          if (["beef", "lamb", "pork", "chicken", "fish"].includes(d.mealType)) {
+          if (["mutton", "lamb", "pork", "chicken", "fish"].includes(d.mealType)) {
             const currentFactor = FOOD_FACTORS[d.mealType as keyof typeof FOOD_FACTORS] ?? FOOD_FACTORS.chicken;
             saving += (currentFactor - FOOD_FACTORS.vegetarian) * d.servings;
           }
@@ -124,7 +124,7 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
       for (const a of activities) {
         if (a.activityType === "food") {
           const d = a.details as { mealType: string; servings: number };
-          if (["beef", "lamb", "pork", "chicken", "fish", "dairy", "vegetarian"].includes(d.mealType)) {
+          if (["mutton", "lamb", "pork", "chicken", "fish", "dairy", "vegetarian"].includes(d.mealType)) {
             const currentFactor = FOOD_FACTORS[d.mealType as keyof typeof FOOD_FACTORS] ?? FOOD_FACTORS.vegetarian;
             saving += (currentFactor - FOOD_FACTORS.vegan) * d.servings;
           }
@@ -134,16 +134,16 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
     },
   },
 
-  reduce_beef: {
-    label: "Cut Beef by 50%",
-    description: "Halve your beef consumption and replace with chicken",
+  reduce_mutton: {
+    label: "Cut mutton by 50%",
+    description: "Halve your mutton consumption and replace with chicken",
     compute: (profile, currentWeekly, activities) => {
       let saving = 0;
       for (const a of activities) {
         if (a.activityType === "food") {
           const d = a.details as { mealType: string; servings: number };
-          if (d.mealType === "beef") {
-            saving += (FOOD_FACTORS.beef - FOOD_FACTORS.chicken) * d.servings * 0.5;
+          if (d.mealType === "mutton") {
+            saving += (FOOD_FACTORS.mutton - FOOD_FACTORS.chicken) * d.servings * 0.5;
           }
         }
       }

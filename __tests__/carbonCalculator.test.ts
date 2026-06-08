@@ -53,10 +53,10 @@ describe("calculateTransportEmissions", () => {
 });
 
 describe("calculateFoodEmissions", () => {
-  it("beef is more carbon intensive than chicken", () => {
-    const beef: FoodActivity = { type: "food", mealType: "beef", servings: 1 };
+  it("mutton is more carbon intensive than chicken", () => {
+    const mutton: FoodActivity = { type: "food", mealType: "mutton", servings: 1 };
     const chicken: FoodActivity = { type: "food", mealType: "chicken", servings: 1 };
-    expect(calculateFoodEmissions(beef)).toBeGreaterThan(calculateFoodEmissions(chicken));
+    expect(calculateFoodEmissions(mutton)).toBeGreaterThan(calculateFoodEmissions(chicken));
   });
 
   it("vegan is less than vegetarian", () => {
@@ -71,9 +71,9 @@ describe("calculateFoodEmissions", () => {
     expect(calculateFoodEmissions(three)).toBeCloseTo(calculateFoodEmissions(one) * 3);
   });
 
-  it("beef meal is approximately 6.61 kg CO2", () => {
-    const beef: FoodActivity = { type: "food", mealType: "beef", servings: 1 };
-    expect(calculateFoodEmissions(beef)).toBeCloseTo(6.61);
+  it("mutton meal is approximately 6.61 kg CO2", () => {
+    const mutton: FoodActivity = { type: "food", mealType: "mutton", servings: 1 };
+    expect(calculateFoodEmissions(mutton)).toBeCloseTo(6.61);
   });
 
   it("vegetarian meal is approximately 0.45 kg CO2", () => {
@@ -110,8 +110,8 @@ describe("calculateActivityEmissions (dispatch)", () => {
     expect(calculateActivityEmissions(details)).toBeCloseTo(1.92);
   });
 
-  it("dispatches food correctly", () => {
-    const details: FoodActivity = { type: "food", mealType: "beef", servings: 1 };
+  it("calculates total emissions correctly with mutton", () => {
+    const details: FoodActivity = { type: "food", mealType: "mutton", servings: 1 };
     expect(calculateActivityEmissions(details)).toBeCloseTo(6.61);
   });
 });
@@ -120,7 +120,7 @@ describe("sumActivities", () => {
   it("sums co2Kg across all activities", () => {
     const activities: ActivityLog[] = [
       { id: "1", timestamp: new Date().toISOString(), activityType: "transport", details: { type: "transport", mode: "car_petrol", distanceKm: 10 }, co2Kg: 1.92 },
-      { id: "2", timestamp: new Date().toISOString(), activityType: "food", details: { type: "food", mealType: "beef", servings: 1 }, co2Kg: 6.61 },
+      { id: "2", timestamp: new Date().toISOString(), activityType: "food", details: { type: "food", mealType: "mutton", servings: 1 }, co2Kg: 6.61 },
     ];
     expect(sumActivities(activities)).toBeCloseTo(8.53);
   });

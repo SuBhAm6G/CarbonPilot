@@ -91,8 +91,8 @@ export function generateRecommendations(
       category: "food",
       title: "Try 2 Meat-Free Days",
       description:
-        "Replacing beef with a plant-based meal just twice a week saves over 13 kg CO₂ — equivalent to driving 70 km!",
-      estimatedCo2SavedKgPerWeek: (FOOD_FACTORS.beef - FOOD_FACTORS.vegetarian) * 2,
+        "Replacing mutton with a plant-based meal just twice a week saves over 13 kg CO₂ — equivalent to driving 70 km!",
+      estimatedCo2SavedKgPerWeek: (FOOD_FACTORS.mutton - FOOD_FACTORS.vegetarian) * 2,
       difficulty: "easy",
       actionLabel: "Browse Plant-Based Recipes",
     });
@@ -101,10 +101,10 @@ export function generateRecommendations(
       recommendations.push({
         id: "rec_chicken_swap",
         category: "food",
-        title: "Swap Beef for Chicken",
+        title: "Swap mutton for Chicken",
         description:
-          "Chicken has 5x fewer emissions than beef. A simple swap at dinner makes a measurable difference every week.",
-        estimatedCo2SavedKgPerWeek: (FOOD_FACTORS.beef - FOOD_FACTORS.chicken) * 3,
+          "Chicken has 5x fewer emissions than mutton. A simple swap at dinner makes a measurable difference every week.",
+        estimatedCo2SavedKgPerWeek: (FOOD_FACTORS.mutton - FOOD_FACTORS.chicken) * 3,
         difficulty: "easy",
         actionLabel: "Learn More",
       });

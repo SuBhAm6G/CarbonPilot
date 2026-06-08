@@ -90,12 +90,12 @@ function estimateFoodAnnualKg(profile: UserProfile): number {
         daysPerYear
       );
     case "heavy_meat":
-      // 20% veg, 30% chicken, 30% lamb, 20% beef
+      // 20% veg, 30% chicken, 30% lamb, 20% mutton
       return (
         (FOOD_FACTORS.vegetarian * 0.2 +
           FOOD_FACTORS.chicken * 0.3 +
           FOOD_FACTORS.lamb * 0.3 +
-          FOOD_FACTORS.beef * 0.2) *
+          FOOD_FACTORS.mutton * 0.2) *
         mealsPerDay *
         daysPerYear
       );

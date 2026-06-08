@@ -19,7 +19,7 @@
 //
 // Food:
 //   - Indian-context portions (300g serving)
-//   - Beef rarely consumed; goat/lamb more common → using lamb factors
+//   - mutton rarely consumed; goat/lamb more common → using lamb factors
 //   - Our World in Data + Indian Food Council estimates
 //
 // Global Benchmarks:
@@ -58,7 +58,7 @@ export const TRANSPORT_LABELS: Record<TransportMode, string> = {
 
 // ---- Food (kg CO₂e per serving, ~300g Indian portion) ----
 export const FOOD_FACTORS = {
-  beef: 6.61,          // Rarely consumed in India; used for tracking — OWiD
+  mutton: 6.61,          // Rarely consumed in India; used for tracking — OWiD
   lamb: 5.84,          // Mutton (common in India) — OWiD / Indian Food Council
   pork: 1.63,          // Pork — OWiD
   chicken: 1.26,       // Chicken (most common meat in India) — OWiD

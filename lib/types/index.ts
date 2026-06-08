@@ -59,7 +59,7 @@ export interface TransportActivity {
 
 export interface FoodActivity {
   type: "food";
-  mealType: "beef" | "lamb" | "pork" | "chicken" | "fish" | "vegetarian" | "vegan" | "dairy";
+  mealType: "mutton" | "lamb" | "pork" | "chicken" | "fish" | "vegetarian" | "vegan" | "dairy";
   servings: number;
 }
 
@@ -179,7 +179,7 @@ export type SimulatorScenario =
   | "switch_to_ev"
   | "become_vegetarian"
   | "become_vegan"
-  | "reduce_beef"
+  | "reduce_mutton"
   | "work_from_home_2days"
   | "renewable_energy"
   | "reduce_flights";

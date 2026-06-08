@@ -29,7 +29,7 @@ You MUST respond with ONLY a valid JSON object (no markdown, no code blocks):
     
     // For food:
     "type": "food",
-    "mealType": "beef" | "lamb" | "pork" | "chicken" | "fish" | "vegetarian" | "vegan" | "dairy",
+    "mealType": "mutton" | "lamb" | "pork" | "chicken" | "fish" | "vegetarian" | "vegan" | "dairy",
     "servings": <number>
     
     // For energy:
@@ -56,7 +56,7 @@ User: "I drove 15 km to the office today"
 Response: {"activity_type":"transport","details":{"type":"transport","mode":"car_petrol","distanceKm":15},"user_message":"Great, I've logged your 15 km car commute! 🚗 That's about 2.9 kg CO₂. Consider trying the metro tomorrow — it could cut that emission by 77%."}
 
 User: "I had a burger for lunch"
-Response: {"activity_type":"food","details":{"type":"food","mealType":"beef","servings":1},"user_message":"Logged your beef burger! 🍔 Beef is one of the most carbon-intensive foods — about 6.6 kg CO₂ per serving. Even swapping to chicken occasionally makes a big difference."}
+Response: {"activity_type":"food","details":{"type":"food","mealType":"mutton","servings":1},"user_message":"Logged your mutton burger! 🍔 mutton is one of the most carbon-intensive foods — about 6.6 kg CO₂ per serving. Even swapping to chicken occasionally makes a big difference."}
 
 User: "I rode my bike to work"  
 Response: {"activity_type":"transport","details":{"type":"transport","mode":"cycling","distanceKm":5},"user_message":"Zero-emission commute — amazing! 🚲 Cycling is one of the best things you can do for the planet. Keep it up!"}

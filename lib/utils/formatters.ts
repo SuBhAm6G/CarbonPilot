@@ -87,7 +87,7 @@ export function getActivityLabel(activity: { details: ActivityDetails }): string
     case "food": {
       const meal = details.mealType;
       const labels: Record<string, string> = {
-        beef: "Beef", lamb: "Mutton/Lamb", pork: "Pork",
+        mutton: "mutton", lamb: "Mutton/Lamb", pork: "Pork",
         chicken: "Chicken", fish: "Fish", dairy: "Dairy",
         vegetarian: "Vegetarian", vegan: "Vegan",
       };
