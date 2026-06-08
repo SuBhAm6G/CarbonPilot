@@ -1,6 +1,7 @@
 import { streamText } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { CARBON_SYSTEM_PROMPT } from "@/lib/ai/systemPrompt";
+import { z } from "zod";
 
 export const runtime = "edge";
 
@@ -8,8 +9,13 @@ const google = createGoogleGenerativeAI({
   apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY ?? "",
 });
 
-// Normalize AI SDK v6 UIMessage format to CoreMessage format for streamText
-function normalizeMessages(messages: Array<Record<string, unknown>>): Array<{ role: string; content: string }> {
+type ChatModelMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
+
+// Normalize AI SDK v6 UIMessage format to text-only messages for streamText.
+function normalizeMessages(messages: Array<Record<string, unknown>>): ChatModelMessage[] {
   return messages.map((msg) => {
     let content = "";
 
@@ -41,14 +47,12 @@ function normalizeMessages(messages: Array<Record<string, unknown>>): Array<{ ro
   });
 }
 
-import { z } from "zod";
-
 const messageSchema = z.object({
   role: z.enum(["user", "assistant"]),
   content: z.union([
     z.string(),
     z.array(z.object({ type: z.string().optional(), text: z.string().optional() }).passthrough())
-  ]),
+  ]).optional(),
   parts: z.array(z.object({ type: z.string().optional(), text: z.string().optional() }).passthrough()).optional(),
 }).passthrough();
 
@@ -85,7 +89,7 @@ export async function POST(req: Request) {
     const result = await streamText({
       model: google("gemini-2.5-flash"),
       system: CARBON_SYSTEM_PROMPT,
-      messages: messages as any,
+      messages,
     });
 
     return result.toUIMessageStreamResponse();

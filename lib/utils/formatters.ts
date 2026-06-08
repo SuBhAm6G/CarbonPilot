@@ -1,6 +1,7 @@
 // ============================================================
 // CarbonPilot — Utility Formatters
 // ============================================================
+import type { ActivityDetails } from "@/lib/types";
 
 export function formatCo2(kg: number): string {
   if (kg < 1) return `${Math.round(kg * 1000)} g CO₂`;
@@ -64,12 +65,12 @@ export function getCategoryLabel(category: string): string {
   }
 }
 
-export function getActivityLabel(activity: { activityType: string; details: Record<string, unknown> }): string {
-  const { activityType, details } = activity;
-  switch (activityType) {
+export function getActivityLabel(activity: { details: ActivityDetails }): string {
+  const { details } = activity;
+  switch (details.type) {
     case "transport": {
-      const mode = details.mode as string;
-      const km = details.distanceKm as number;
+      const mode = details.mode;
+      const km = details.distanceKm;
       const labels: Record<string, string> = {
         car_petrol: "Petrol Car",
         car_diesel: "Diesel Car",
@@ -84,7 +85,7 @@ export function getActivityLabel(activity: { activityType: string; details: Reco
       return `${labels[mode] ?? mode} · ${km} km`;
     }
     case "food": {
-      const meal = details.mealType as string;
+      const meal = details.mealType;
       const labels: Record<string, string> = {
         beef: "Beef", lamb: "Mutton/Lamb", pork: "Pork",
         chicken: "Chicken", fish: "Fish", dairy: "Dairy",
@@ -93,15 +94,15 @@ export function getActivityLabel(activity: { activityType: string; details: Reco
       return `${labels[meal] ?? meal} meal`;
     }
     case "energy": {
-      const type = details.energyType as string;
-      const amount = details.amount as number;
+      const type = details.energyType;
+      const amount = details.amount;
       return `${type === "electricity" ? "Electricity" : type === "gas" ? "Gas" : "Heating"} · ${amount} ${type === "gas" ? "m³" : "kWh"}`;
     }
     case "shopping": {
-      const cat = details.category as string;
+      const cat = details.category;
       return `Shopping · ${cat}`;
     }
     default:
-      return (details.description as string) ?? "Activity";
+      return details.description ?? "Activity";
   }
 }

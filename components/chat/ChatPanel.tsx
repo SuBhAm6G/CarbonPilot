@@ -1,5 +1,6 @@
 "use client";
 
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { useChat } from "@ai-sdk/react";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { useCarbonStore } from "@/lib/store/carbonStore";
@@ -15,6 +16,17 @@ const QUICK_PROMPTS = [
   "I used AC for 4 hours",
   "I rode my bike to the store",
 ];
+
+const chatTransport = new DefaultChatTransport({
+  api: "/api/chat",
+});
+
+function getMessageText(message: UIMessage): string {
+  return message.parts
+    .filter((part) => part.type === "text")
+    .map((part) => part.text)
+    .join("");
+}
 
 function tryParseAIResponse(content: string): {
   parsed: boolean; details?: ActivityDetails; summary?: string; activityType?: string;
@@ -51,20 +63,19 @@ export default function ChatPanel() {
   const profile = useCarbonStore((s) => s.profile);
   const bottomRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
-  const [loggedIds, setLoggedIds] = useState<Set<string>>(new Set());
+  const [, setLoggedIds] = useState<Set<string>>(new Set());
 
-  const { messages, sendMessage, status } = useChat({
-    api: "/api/chat",
-    onFinish: (message) => {
-      const content = typeof message.content === "string"
-        ? message.content
-        : JSON.stringify(message.content);
+  const { messages, sendMessage, status, error } = useChat({
+    transport: chatTransport,
+    onFinish: ({ message }) => {
+      const content = getMessageText(message);
       const { parsed, details, summary } = tryParseAIResponse(content);
       if (parsed && details && details.type !== "other") {
-        if (!loggedIds.has(message.id)) {
-          setLoggedIds((prev) => new Set([...prev, message.id]));
+        setLoggedIds((prev) => {
+          if (prev.has(message.id)) return prev;
           logActivity(details, summary);
-        }
+          return new Set([...prev, message.id]);
+        });
       }
     },
   });
@@ -79,12 +90,12 @@ export default function ChatPanel() {
     e?.preventDefault();
     const trimmed = input.trim();
     if (!trimmed || isLoading) return;
-    sendMessage({ role: "user", content: trimmed });
+    sendMessage({ text: trimmed });
     setInput("");
   }, [input, isLoading, sendMessage]);
 
   const handleQuickPrompt = useCallback((prompt: string) => {
-    sendMessage({ role: "user", content: prompt });
+    sendMessage({ text: prompt });
   }, [sendMessage]);
 
   const hasMessages = messages.length > 0;
@@ -99,7 +110,7 @@ export default function ChatPanel() {
         </div>
         <div>
           <h1 className="font-bold text-lg" style={{ color: "#e2e8f0" }}>AI Carbon Assistant</h1>
-          <p className="text-xs" style={{ color: "#64748b" }}>Tell me what you did today — I'll track your carbon footprint</p>
+          <p className="text-xs" style={{ color: "#64748b" }}>Tell me what you did today — I&apos;ll track your carbon footprint</p>
         </div>
         <div className="ml-auto flex items-center gap-1.5">
           <div className="pulse-dot" />
@@ -121,7 +132,7 @@ export default function ChatPanel() {
             <div>
               <h2 className="font-semibold text-lg" style={{ color: "#e2e8f0" }}>Start tracking your day</h2>
               <p className="text-sm mt-1 max-w-sm" style={{ color: "#64748b" }}>
-                Tell me about your commute, meals, or energy use. I'll calculate exact CO₂ using India-specific emission factors.
+                Tell me about your commute, meals, or energy use. I&apos;ll calculate exact CO₂ using India-specific emission factors.
               </p>
             </div>
             {profile && (
@@ -147,12 +158,7 @@ export default function ChatPanel() {
 
         {/* Messages */}
         {messages.map((msg) => {
-          const textContent = msg.parts
-            ? msg.parts
-                .filter((p: { type: string }) => p.type === "text")
-                .map((p: { type: string; text?: string }) => p.text ?? "")
-                .join("")
-            : (typeof msg.content === "string" ? msg.content : "");
+          const textContent = getMessageText(msg);
 
           return (
             <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -206,6 +212,11 @@ export default function ChatPanel() {
               <span className="w-1.5 h-1.5 rounded-full animate-bounce"
                 style={{ background: "#64748b", animationDelay: "300ms" }} />
             </div>
+          </div>
+        )}
+        {error && (
+          <div className="rounded-xl border border-red-500/30 bg-red-950/30 px-3 py-2 text-sm text-red-200">
+            I couldn&apos;t get a response. Please try again in a moment.
           </div>
         )}
         <div ref={bottomRef} />
