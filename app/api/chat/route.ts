@@ -86,8 +86,6 @@ export async function POST(req: Request) {
       model: google("gemini-2.5-flash"),
       system: CARBON_SYSTEM_PROMPT,
       messages: messages as Parameters<typeof streamText>[0]["messages"],
-      maxTokens: 512,
-      temperature: 0.3,
     });
 
     return result.toUIMessageStreamResponse();
