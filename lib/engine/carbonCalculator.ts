@@ -63,15 +63,15 @@ export function calculateShoppingEmissions(activity: ShoppingActivity): number {
 export function calculateActivityEmissions(details: ActivityDetails): number {
   switch (details.type) {
     case "transport":
-      return calculateTransportEmissions(details as TransportActivity);
+      return calculateTransportEmissions(details);
     case "food":
-      return calculateFoodEmissions(details as FoodActivity);
+      return calculateFoodEmissions(details);
     case "energy":
-      return calculateEnergyEmissions(details as EnergyActivity);
+      return calculateEnergyEmissions(details);
     case "shopping":
-      return calculateShoppingEmissions(details as ShoppingActivity);
+      return calculateShoppingEmissions(details);
     case "other":
-      return (details as OtherActivity).co2Kg;
+      return details.co2Kg;
     default:
       return 0;
   }

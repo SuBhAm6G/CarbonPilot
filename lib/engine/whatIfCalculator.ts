@@ -45,8 +45,8 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
     compute: (profile, currentWeekly, activities) => {
       let saving = 0;
       for (const a of activities) {
-        if (a.activityType === "transport") {
-          const d = a.details as { mode: string; distanceKm: number };
+        if (a.details.type === "transport") {
+          const d = a.details;
           if (["car_petrol", "car_diesel", "motorcycle"].includes(d.mode)) {
             const currentFactor = TRANSPORT_FACTORS[d.mode as keyof typeof TRANSPORT_FACTORS] ?? 0.12;
             const newFactor = TRANSPORT_FACTORS.train;
@@ -64,8 +64,8 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
     compute: (profile, currentWeekly, activities) => {
       let saving = 0;
       for (const a of activities) {
-        if (a.activityType === "transport") {
-          const d = a.details as { mode: string; distanceKm: number };
+        if (a.details.type === "transport") {
+          const d = a.details;
           if (
             ["car_petrol", "car_diesel", "motorcycle"].includes(d.mode) &&
             d.distanceKm <= 10
@@ -85,8 +85,8 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
     compute: (profile, currentWeekly, activities) => {
       let saving = 0;
       for (const a of activities) {
-        if (a.activityType === "transport") {
-          const d = a.details as { mode: string; distanceKm: number };
+        if (a.details.type === "transport") {
+          const d = a.details;
           if (["car_petrol", "car_diesel"].includes(d.mode)) {
             const currentFactor = TRANSPORT_FACTORS[d.mode as keyof typeof TRANSPORT_FACTORS] ?? 0.192;
             const saving_ = (currentFactor - TRANSPORT_FACTORS.car_electric) * d.distanceKm;
@@ -104,8 +104,8 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
     compute: (profile, currentWeekly, activities) => {
       let saving = 0;
       for (const a of activities) {
-        if (a.activityType === "food") {
-          const d = a.details as { mealType: string; servings: number };
+        if (a.details.type === "food") {
+          const d = a.details;
           if (["mutton", "lamb", "pork", "chicken", "fish"].includes(d.mealType)) {
             const currentFactor = FOOD_FACTORS[d.mealType as keyof typeof FOOD_FACTORS] ?? FOOD_FACTORS.chicken;
             saving += (currentFactor - FOOD_FACTORS.vegetarian) * d.servings;
@@ -122,8 +122,8 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
     compute: (profile, currentWeekly, activities) => {
       let saving = 0;
       for (const a of activities) {
-        if (a.activityType === "food") {
-          const d = a.details as { mealType: string; servings: number };
+        if (a.details.type === "food") {
+          const d = a.details;
           if (["mutton", "lamb", "pork", "chicken", "fish", "dairy", "vegetarian"].includes(d.mealType)) {
             const currentFactor = FOOD_FACTORS[d.mealType as keyof typeof FOOD_FACTORS] ?? FOOD_FACTORS.vegetarian;
             saving += (currentFactor - FOOD_FACTORS.vegan) * d.servings;
@@ -140,8 +140,8 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
     compute: (profile, currentWeekly, activities) => {
       let saving = 0;
       for (const a of activities) {
-        if (a.activityType === "food") {
-          const d = a.details as { mealType: string; servings: number };
+        if (a.details.type === "food") {
+          const d = a.details;
           // Match both "mutton" and "lamb" — same food, both returned by AI
           if (d.mealType === "mutton" || d.mealType === "lamb") {
             const factor = FOOD_FACTORS[d.mealType as keyof typeof FOOD_FACTORS] ?? FOOD_FACTORS.lamb;
@@ -161,8 +161,8 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
       const wfhDays = 2;
       let saving = 0;
       for (const a of activities) {
-        if (a.activityType === "transport") {
-          const d = a.details as { mode: string; distanceKm: number };
+        if (a.details.type === "transport") {
+          const d = a.details;
           if (["car_petrol", "car_diesel", "car_electric", "motorcycle"].includes(d.mode)) {
             const factor = TRANSPORT_FACTORS[d.mode as keyof typeof TRANSPORT_FACTORS] ?? 0.12;
             const dailyEmissions = (factor * d.distanceKm) / commuteDays;
