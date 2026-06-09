@@ -5,7 +5,7 @@
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
-[![Gemini AI](https://img.shields.io/badge/Gemini-2.5--Flash-teal)](https://ai.google.dev/)
+[![Gemini AI](https://img.shields.io/badge/Gemini-3.5--Flash-teal)](https://ai.google.dev/)
 [![Tests](https://img.shields.io/badge/Tests-64%20passing-brightgreen)](#testing)
 
 ---
@@ -66,7 +66,7 @@ User talks to AI → AI parses intent → Deterministic engine calculates CO₂ 
 └────────────────────────┬────────────────────────────────────────┘
                          │ /api/chat (Edge Function)
 ┌────────────────────────▼────────────────────────────────────────┐
-│               AI LAYER (Vercel Edge + Gemini 2.5 Flash)          │
+│               AI LAYER (Vercel Edge + Gemini 3.5 Flash)          │
 │                                                                   │
 │  buildSystemPrompt(profile) → Personalized system prompt         │
 │  Zod validation of request payload                               │
@@ -89,7 +89,7 @@ User talks to AI → AI parses intent → Deterministic engine calculates CO₂ 
 
 | Feature | Description |
 |---|---|
-| 🤖 **AI Chat Assistant** | Natural language activity logging powered by Gemini 2.5 Flash |
+| 🤖 **AI Chat Assistant** | Natural language activity logging powered by Gemini 3.5 Flash |
 | 🔍 **AI Insight Card** | Context-aware weekly analysis ("Transport is your biggest emission source") |
 | 🧬 **Carbon Twin** | Visual comparison vs India average, global average, Paris 2030 target |
 | 📊 **Live Dashboard** | Real-time score ring, 7-day chart, category breakdown |
@@ -103,7 +103,7 @@ User talks to AI → AI parses intent → Deterministic engine calculates CO₂ 
 ## AI + Rule Engine Explained
 
 ### Intent Extraction (AI)
-Gemini 2.5 Flash receives a personalized system prompt that includes the user's transport mode, diet type, and sustainability goals. It converts natural language like "I drove my car 12km and had chicken biryani" into a structured JSON payload:
+Gemini 3.5 Flash receives a personalized system prompt that includes the user's transport mode, diet type, and sustainability goals. It converts natural language like "I drove my car 12km and had chicken biryani" into a structured JSON payload:
 
 ```json
 {
@@ -259,7 +259,7 @@ npm run test
 | Layer | Technology |
 |---|---|
 | Framework | Next.js 16 (App Router) |
-| AI | Gemini 2.5 Flash via Vercel AI SDK v6 |
+| AI | Gemini 3.5 Flash via Vercel AI SDK v6 |
 | State Management | Zustand with localStorage persistence |
 | Validation | Zod (API payloads) |
 | Charts | Recharts |

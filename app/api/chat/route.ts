@@ -117,7 +117,7 @@ export async function POST(req: Request): Promise<Response> {
     const systemPrompt = buildSystemPrompt(profileContext as UserProfile | null);
 
     const result = await streamText({
-      model: google("gemini-2.5-flash"),
+      model: google("gemini-3.5-flash"),
       system: systemPrompt,
       messages,
     });
