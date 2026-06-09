@@ -12,28 +12,37 @@ const google = createGoogleGenerativeAI({
 
 // ---- Input Validation Schema ----
 
-const messagePart = z.object({
-  type: z.string().optional(),
-  text: z.string().optional(),
-}).passthrough();
+const messagePart = z
+  .object({
+    type: z.string().optional(),
+    text: z.string().optional(),
+  })
+  .passthrough();
 
-const messageSchema = z.object({
-  role: z.enum(["user", "assistant"]),
-  content: z.union([z.string(), z.array(messagePart)]),
-  parts: z.array(messagePart).optional(),
-}).passthrough();
+const messageSchema = z
+  .object({
+    role: z.string(), // Accept any role string — AI SDK may send 'user', 'assistant', 'tool', etc.
+    content: z
+      .union([z.string(), z.array(z.any())])
+      .optional()
+      .default(""),
+    parts: z.array(messagePart).optional(),
+  })
+  .passthrough();
 
 const chatRequestSchema = z.object({
   messages: z.array(messageSchema).min(1).max(50),
   // Optional user profile for personalized AI responses
-  profileContext: z.object({
-    name: z.string().optional(),
-    primaryTransport: z.string().optional(),
-    dietType: z.string().optional(),
-    sustainabilityGoal: z.string().optional(),
-    householdSize: z.number().optional(),
-    monthlyElectricityKwh: z.number().optional(),
-  }).optional(),
+  profileContext: z
+    .object({
+      name: z.string().optional(),
+      primaryTransport: z.string().optional(),
+      dietType: z.string().optional(),
+      sustainabilityGoal: z.string().optional(),
+      householdSize: z.number().optional(),
+      monthlyElectricityKwh: z.number().optional(),
+    })
+    .optional(),
 });
 
 // ---- Message Normalization ----

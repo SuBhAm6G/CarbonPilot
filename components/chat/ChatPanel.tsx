@@ -1,6 +1,6 @@
 "use client";
 
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { useChat } from "@ai-sdk/react";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { useCarbonStore } from "@/lib/store/carbonStore";
