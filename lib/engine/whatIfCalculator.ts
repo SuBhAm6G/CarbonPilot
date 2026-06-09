@@ -135,15 +135,17 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
   },
 
   reduce_mutton: {
-    label: "Cut mutton by 50%",
+    label: "Cut Mutton by 50%",
     description: "Halve your mutton consumption and replace with chicken",
     compute: (profile, currentWeekly, activities) => {
       let saving = 0;
       for (const a of activities) {
         if (a.activityType === "food") {
           const d = a.details as { mealType: string; servings: number };
-          if (d.mealType === "mutton") {
-            saving += (FOOD_FACTORS.mutton - FOOD_FACTORS.chicken) * d.servings * 0.5;
+          // Match both "mutton" and "lamb" — same food, both returned by AI
+          if (d.mealType === "mutton" || d.mealType === "lamb") {
+            const factor = FOOD_FACTORS[d.mealType as keyof typeof FOOD_FACTORS] ?? FOOD_FACTORS.lamb;
+            saving += (factor - FOOD_FACTORS.chicken) * d.servings * 0.5;
           }
         }
       }
