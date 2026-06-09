@@ -270,4 +270,5 @@ npm run test
 
 ---
 
-*Built for the Climate Tech Hackathon · India-first emission factors · All carbon math verified against IEA, CEA, DMRC, and Our World in Data sources.*
+*Built for the Google Promptwars Virtual · India-first emission factors · All carbon math verified against IEA, CEA, DMRC, and Our World in Data sources.*
+
