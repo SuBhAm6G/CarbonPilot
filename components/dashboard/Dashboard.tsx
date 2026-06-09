@@ -8,6 +8,7 @@ import {
 import { calculateScore, getScoreColor, calculateStreak } from "@/lib/engine/scoreCalculator";
 import { generateRecommendations } from "@/lib/engine/recommendationEngine";
 import { getLast7DaysStats, sumByCategory } from "@/lib/engine/carbonCalculator";
+import { generateInsightCard, getPreviousWeekKg } from "@/lib/engine/insightEngine";
 import { formatCo2, formatDayLabel, getCategoryEmoji, getActivityLabel, formatDate } from "@/lib/utils/formatters";
 import { GLOBAL_BENCHMARKS } from "@/lib/engine/emissionFactors";
 import type { ActivityLog } from "@/lib/types";
@@ -103,6 +104,12 @@ export default function Dashboard({ onGoToChat }: { onGoToChat: () => void }) {
   const unlockedBadges = badges.filter((b) => b.unlocked);
   const hasActivities = activities.length > 0;
 
+  const prevWeeklyKg = useMemo(() => getPreviousWeekKg(activities), [activities]);
+  const insight = useMemo(
+    () => generateInsightCard(activities, profile, weeklyKg, prevWeeklyKg),
+    [activities, profile, weeklyKg, prevWeeklyKg]
+  );
+
   const chartData = daily7.map((d) => ({
     name: formatDayLabel(d.date),
     kg: Math.round(d.co2Kg * 10) / 10,
@@ -129,6 +136,35 @@ export default function Dashboard({ onGoToChat }: { onGoToChat: () => void }) {
           </button>
         )}
       </div>
+
+      {/* AI Insight Card */}
+      {hasActivities && (
+        <div className="glass-card p-5 border-l-4" style={{ borderLeftColor: insight.isTrending === 'up' ? '#10b981' : insight.isTrending === 'down' ? '#f59e0b' : '#3b82f6' }}>
+          <div className="flex items-start gap-3">
+            <div className="text-2xl flex-shrink-0" aria-hidden="true">
+              {insight.isTrending === 'up' ? '📉' : insight.isTrending === 'down' ? '📈' : '🔍'}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs font-semibold uppercase tracking-widest text-emerald-400">AI Insight</span>
+                {insight.isTrending === 'up' && (
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-400">↓ Improving</span>
+                )}
+                {insight.isTrending === 'down' && (
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-amber-950/60 text-amber-400">↑ Increasing</span>
+                )}
+              </div>
+              <p className="text-sm font-semibold text-slate-200 mb-1">{insight.headline}</p>
+              <p className="text-xs text-slate-500 leading-relaxed">{insight.detail}</p>
+              {insight.potentialSavingKgPerWeek > 0 && (
+                <p className="text-xs text-emerald-400 mt-2 font-medium">
+                  💡 Potential saving: ~{formatCo2(insight.potentialSavingKgPerWeek)}/week
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Score + Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -235,20 +271,19 @@ export default function Dashboard({ onGoToChat }: { onGoToChat: () => void }) {
           ) : (
             <div className="overflow-y-auto max-h-64 space-y-0.5">
               {recentActivities.map((activity) => {
-                const act = activity as ActivityLog & { co2Kg: number; timestamp: string; aiSummary?: string };
-                const label = getActivityLabel(act as Parameters<typeof getActivityLabel>[0]);
-                const emoji = getCategoryEmoji(act.activityType);
+                const label = getActivityLabel(activity);
+                const emoji = getCategoryEmoji(activity.activityType);
                 return (
-                  <div key={act.id} className="flex items-center gap-3 py-2.5 border-b border-slate-800/60 last:border-0">
+                  <div key={activity.id} className="flex items-center gap-3 py-2.5 border-b border-slate-800/60 last:border-0">
                     <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 text-sm">{emoji}</div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-slate-200 truncate">{label}</p>
                       <p className="text-xs text-slate-600 truncate">
-                        {act.aiSummary ? act.aiSummary.slice(0, 55) + "…" : formatDate(act.timestamp)}
+                        {activity.aiSummary ? activity.aiSummary.slice(0, 55) + "…" : formatDate(activity.timestamp)}
                       </p>
                     </div>
-                    <span className={`text-sm font-semibold flex-shrink-0 ${act.co2Kg > 3 ? "text-amber-400" : "text-emerald-400"}`}>
-                      {formatCo2(act.co2Kg)}
+                    <span className={`text-sm font-semibold flex-shrink-0 ${activity.co2Kg > 3 ? "text-amber-400" : "text-emerald-400"}`}>
+                      {formatCo2(activity.co2Kg)}
                     </span>
                   </div>
                 );

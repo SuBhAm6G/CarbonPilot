@@ -5,8 +5,7 @@
 
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { UserProfile, ActivityLog, Badge, WeeklyChallenge } from "@/lib/types";
-import type { ActivityDetails } from "@/lib/types";
+import type { UserProfile, ActivityLog, Badge, WeeklyChallenge, ActivityDetails } from "@/lib/types";
 import type { CarbonTwinProfile } from "@/lib/engine/carbonTwin";
 import { generateActivityId, calculateActivityEmissions } from "@/lib/engine/carbonCalculator";
 import { ALL_BADGES, checkBadges, generateWeeklyChallenge } from "@/lib/engine/recommendationEngine";
@@ -141,7 +140,7 @@ export const useCarbonStore = create<CarbonState>()(
           aiSummary,
         };
 
-        const returnedActivity = activity;
+
 
         set((state) => {
           const newActivities = [activity, ...state.activities];
@@ -169,10 +168,10 @@ export const useCarbonStore = create<CarbonState>()(
             newActivities, currentStreak, weeklyKg, prevWeeklyKg, state.badges
           );
 
-          return { activities: newActivities, badges: updatedBadges };
+        return { activities: newActivities, badges: updatedBadges };
         });
 
-        return returnedActivity;
+        return activity;
       },
 
       removeActivity: (id: string) => {

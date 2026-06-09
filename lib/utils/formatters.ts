@@ -87,7 +87,7 @@ export function getActivityLabel(activity: { details: ActivityDetails }): string
     case "food": {
       const meal = details.mealType;
       const labels: Record<string, string> = {
-        mutton: "mutton", lamb: "Mutton/Lamb", pork: "Pork",
+        mutton: "Mutton", lamb: "Mutton/Lamb", pork: "Pork",
         chicken: "Chicken", fish: "Fish", dairy: "Dairy",
         vegetarian: "Vegetarian", vegan: "Vegan",
       };
@@ -102,7 +102,9 @@ export function getActivityLabel(activity: { details: ActivityDetails }): string
       const cat = details.category;
       return `Shopping · ${cat}`;
     }
-    default:
-      return details.description ?? "Activity";
+    default: {
+      const o = details as { description?: string };
+      return o.description ?? "Activity";
+    }
   }
 }

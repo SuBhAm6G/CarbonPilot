@@ -83,10 +83,12 @@ export function sumActivities(activities: ActivityLog[]): number {
   return activities.reduce((sum, a) => sum + a.co2Kg, 0);
 }
 
-export function sumByCategory(activities: ActivityLog[]): Record<string, number> {
-  const result: Record<string, number> = {};
+export function sumByCategory(
+  activities: ActivityLog[]
+): Partial<Record<ActivityType, number>> {
+  const result: Partial<Record<ActivityType, number>> = {};
   for (const activity of activities) {
-    const cat = activity.activityType;
+    const cat = activity.activityType as ActivityType;
     result[cat] = (result[cat] ?? 0) + activity.co2Kg;
   }
   return result;

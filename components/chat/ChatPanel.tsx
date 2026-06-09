@@ -1,6 +1,6 @@
 "use client";
 
-import { DefaultChatTransport, type UIMessage } from "ai";
+import { DefaultChatTransport } from "ai";
 import { useChat } from "@ai-sdk/react";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { useCarbonStore } from "@/lib/store/carbonStore";
@@ -28,33 +28,30 @@ function getMessageText(message: UIMessage): string {
     .join("");
 }
 
-function tryParseAIResponse(content: string): {
-  parsed: boolean; details?: ActivityDetails; summary?: string; activityType?: string;
+/**
+ * Parses the AI response JSON from message content.
+ * Returns structured data if a valid activity payload is found,
+ * otherwise returns the raw text as the display content.
+ */
+function parseAIMessage(content: string): {
+  displayContent: string;
+  details?: ActivityDetails;
+  activityType?: string;
+  parsed: boolean;
 } {
   try {
     const jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) return { parsed: false };
+    if (!jsonMatch) return { displayContent: content, parsed: false };
     const json = JSON.parse(jsonMatch[0]);
-    if (!json.details || !json.user_message) return { parsed: false };
+    if (!json.user_message) return { displayContent: content, parsed: false };
     return {
-      parsed: true,
-      details: json.details as ActivityDetails,
-      summary: json.user_message,
-      activityType: json.activity_type,
+      displayContent: json.user_message as string,
+      details: json.details as ActivityDetails | undefined,
+      activityType: json.activity_type as string | undefined,
+      parsed: !!(json.details),
     };
   } catch {
-    return { parsed: false };
-  }
-}
-
-function getDisplayContent(content: string): string {
-  try {
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) return content;
-    const json = JSON.parse(jsonMatch[0]);
-    return json.user_message ?? content;
-  } catch {
-    return content;
+    return { displayContent: content, parsed: false };
   }
 }
 
@@ -69,11 +66,11 @@ export default function ChatPanel() {
     transport: chatTransport,
     onFinish: ({ message }) => {
       const content = getMessageText(message);
-      const { parsed, details, summary } = tryParseAIResponse(content);
+      const { parsed, details, displayContent } = parseAIMessage(content);
       if (parsed && details && details.type !== "other") {
         setLoggedIds((prev) => {
           if (prev.has(message.id)) return prev;
-          logActivity(details, summary);
+          logActivity(details, displayContent);
           return new Set([...prev, message.id]);
         });
       }
@@ -156,9 +153,9 @@ export default function ChatPanel() {
           </div>
         )}
 
-        {/* Messages */}
         {messages.map((msg) => {
           const textContent = getMessageText(msg);
+          const parsed = msg.role === "assistant" ? parseAIMessage(textContent) : null;
 
           return (
             <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -170,17 +167,15 @@ export default function ChatPanel() {
               )}
               <div className={`flex flex-col gap-1.5 max-w-[82%] ${msg.role === "user" ? "items-end" : "items-start"}`}>
                 <div className={msg.role === "user" ? "chat-bubble-user" : "chat-bubble-ai"}>
-                  {msg.role === "assistant" ? getDisplayContent(textContent) : textContent}
+                  {msg.role === "assistant" ? (parsed?.displayContent ?? textContent) : textContent}
                 </div>
                 {/* Activity tag */}
-                {msg.role === "assistant" && (() => {
-                  const { parsed, details, activityType } = tryParseAIResponse(textContent);
-                  if (!parsed || !details || details.type === "other") return null;
-                  const kg = calculateActivityEmissions(details);
+                {parsed?.parsed && parsed.details && parsed.details.type !== "other" && (() => {
+                  const kg = calculateActivityEmissions(parsed.details);
                   return (
                     <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
                       style={{ background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)", color: "#34d399" }}>
-                      <span>{getCategoryEmoji(activityType ?? "other")}</span>
+                      <span>{getCategoryEmoji(parsed.activityType ?? "other")}</span>
                       <span>+{formatCo2(kg)} logged to dashboard</span>
                       <span>✓</span>
                     </div>
@@ -196,6 +191,7 @@ export default function ChatPanel() {
             </div>
           );
         })}
+
 
         {/* Typing indicator */}
         {isLoading && (
