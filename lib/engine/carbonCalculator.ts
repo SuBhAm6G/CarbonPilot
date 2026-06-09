@@ -6,6 +6,7 @@
 import type {
   ActivityLog,
   ActivityDetails,
+  ActivityType,
   TransportActivity,
   FoodActivity,
   EnergyActivity,

@@ -1,4 +1,4 @@
-import { streamText, type CoreMessage } from "ai";
+import { streamText, type ModelMessage } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { z } from "zod";
 import { buildSystemPrompt } from "@/lib/ai/systemPrompt";
@@ -47,11 +47,11 @@ const chatRequestSchema = z.object({
 
 // ---- Message Normalization ----
 
-/** Converts AI SDK v6 UIMessage format into CoreMessage format for streamText */
+/** Converts AI SDK v6 UIMessage format into ModelMessage format for streamText */
 function normalizeMessages(
   messages: z.infer<typeof messageSchema>[]
-): CoreMessage[] {
-  const normalized: CoreMessage[] = [];
+): ModelMessage[] {
+  const normalized: ModelMessage[] = [];
 
   for (const msg of messages) {
     let content = "";
