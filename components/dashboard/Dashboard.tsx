@@ -308,23 +308,7 @@ export default function Dashboard({ onGoToChat }: { onGoToChat: () => void }) {
         </div>
       )}
 
-      {/* Weekly Challenge */}
-      {weeklyChallenge && (
-        <div className="glass-card p-5 border-emerald-900/30">
-          <div className="flex items-center gap-2 mb-3">
-            <span>⚡</span>
-            <h2 className="font-semibold text-sm text-slate-300">Weekly Challenge</h2>
-            <span className="ml-auto text-xs text-slate-600">{weeklyChallenge.daysCompleted}/{weeklyChallenge.totalDays} days</span>
-          </div>
-          <p className="text-sm font-medium text-slate-200">{weeklyChallenge.title}</p>
-          <p className="text-xs text-slate-500 mt-1">{weeklyChallenge.description}</p>
-          <div className="mt-3 h-2 bg-slate-800 rounded-full overflow-hidden">
-            <div className="h-full bg-emerald-500 rounded-full transition-all duration-500"
-              style={{ width: `${(weeklyChallenge.daysCompleted / weeklyChallenge.totalDays) * 100}%` }} />
-          </div>
-          <p className="text-xs text-emerald-400 mt-1.5">Save ~{formatCo2(weeklyChallenge.targetCo2ReductionKg)} if completed</p>
-        </div>
-      )}
+
     </div>
   );
 }

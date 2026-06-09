@@ -94,8 +94,9 @@ export default function AppShell() {
                 activeTab === tab.id ? "text-emerald-400" : "text-slate-600"
               }`}
               aria-current={activeTab === tab.id ? "page" : undefined}
+              aria-label={tab.label}
             >
-              <span className="text-lg">{tab.emoji}</span>
+              <span className="text-lg" aria-hidden="true">{tab.emoji}</span>
               <span>{tab.label}</span>
             </button>
           ))}
