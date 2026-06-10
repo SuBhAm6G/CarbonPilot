@@ -37,7 +37,7 @@ User talks to AI → AI parses intent → Deterministic engine calculates CO₂ 
 
 1. **Onboarding** — User shares their lifestyle profile (transport, diet, energy source)
 2. **Carbon Twin** — Instant visual comparison against India average, global average, and Paris 2030 target
-3. **AI Chat** — User describes their day naturally; AI extracts activities and logs them
+3. **AI Chat & Manual Logging** — Log activities naturally via AI conversation or instantly via the Quick Manual Panel
 4. **Live Dashboard** — Real-time score, 7-day emissions chart, category breakdown
 5. **AI Insight Card** — Context-aware analysis ("Transport generated 62% of your emissions this week")
 6. **What-If Simulator** — Explore "What if I switched to metro?" with live CO₂ projections
@@ -53,8 +53,8 @@ User talks to AI → AI parses intent → Deterministic engine calculates CO₂ 
 │                                                                   │
 │  ┌──────────┐  ┌──────────────┐  ┌────────────┐  ┌──────────┐  │
 │  │  AI Chat  │  │  Dashboard   │  │Carbon Twin │  │Simulator │  │
-│  │(ChatPanel)│  │(Insight Card)│  │  (Card)    │  │  Panel   │  │
-│  └────┬─────┘  └──────────────┘  └────────────┘  └──────────┘  │
+│  │(ChatPanel)│  │ & Manual Log │  │  (Card)    │  │  Panel   │  │
+│  └────┬─────┘  └──────┬───────┘  └────────────┘  └──────────┘  │
 │       │                  ↑                                        │
 │       │          Zustand Store (persisted to localStorage)        │
 │       │                  ↑                                        │
@@ -90,6 +90,7 @@ User talks to AI → AI parses intent → Deterministic engine calculates CO₂ 
 | Feature | Description |
 |---|---|
 | 🤖 **AI Chat Assistant** | Natural language activity logging powered by Gemini 3.5 Flash |
+| ✏️ **Quick Manual Log** | Instant, zero-friction structured logging for power-users directly from the dashboard |
 | 🔍 **AI Insight Card** | Context-aware weekly analysis ("Transport is your biggest emission source") |
 | 🧬 **Carbon Twin** | Visual comparison vs India average, global average, Paris 2030 target |
 | 📊 **Live Dashboard** | Real-time score ring, 7-day chart, category breakdown |
@@ -226,6 +227,17 @@ CarbonPilot/
     ├── carbonCalculator.test.ts  # Core math tests
     └── engines.test.ts           # Engine coverage tests
 ```
+
+---
+
+## Future Roadmap
+
+While CarbonPilot is fully functional today, there is immense potential to expand its impact:
+
+- 💳 **Banking/Plaid Integration**: Automatically parse credit card transactions to calculate shopping and lifestyle emissions without manual entry.
+- 🏃 **Fitness App Integrations (Strava/HealthKit)**: Automatically pull cycling, running, and walking data to automatically log zero-emission activities and apply offset credits.
+- 🏆 **Community & Leaderboards**: Compete with friends, family, or coworkers in weekly carbon-reduction challenges.
+- 🛒 **Barcode Scanner**: Scan grocery items to get the exact emission cost of specific products rather than generic categories.
 
 ---
 
