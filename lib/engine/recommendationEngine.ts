@@ -12,13 +12,14 @@ import type {
   WeeklyChallenge,
 } from "@/lib/types";
 import { TRANSPORT_FACTORS, FOOD_FACTORS, GLOBAL_BENCHMARKS } from "./emissionFactors";
-import { sumActivities, sumByCategory } from "./carbonCalculator";
+import { sumByCategory } from "./carbonCalculator";
 
 // ---- Recommendation Generation ----
 
 export function generateRecommendations(
   profile: UserProfile,
   recentActivities: ActivityLog[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   weeklyKg: number
 ): Recommendation[] {
   const recommendations: Recommendation[] = [];

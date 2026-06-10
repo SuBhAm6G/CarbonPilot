@@ -9,6 +9,7 @@ export default function Home() {
   const isOnboarded = useCarbonStore((s) => s.isOnboarded);
   const [mounted, setMounted] = useState(false);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setMounted(true); }, []);
 
   if (!mounted) {

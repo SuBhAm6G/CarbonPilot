@@ -9,7 +9,7 @@ import {
 import { runSimulator, getAllScenarios } from "../lib/engine/whatIfCalculator";
 import { generateCarbonTwin } from "../lib/engine/carbonTwin";
 import { generateInsightCard, getPreviousWeekKg } from "../lib/engine/insightEngine";
-import type { UserProfile, ActivityLog, FoodActivity, TransportActivity } from "../lib/types";
+import type { UserProfile, ActivityLog } from "../lib/types";
 
 // ---- Shared test fixtures ----
 

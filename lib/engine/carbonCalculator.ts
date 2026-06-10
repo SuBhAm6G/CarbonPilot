@@ -11,7 +11,6 @@ import type {
   FoodActivity,
   EnergyActivity,
   ShoppingActivity,
-  OtherActivity,
 } from "@/lib/types";
 import {
   TRANSPORT_FACTORS,

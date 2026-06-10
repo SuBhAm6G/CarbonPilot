@@ -245,7 +245,7 @@ export default function OnboardingWizard() {
             <div className="space-y-5">
               <div>
                 <h2 className="text-xl font-bold text-slate-100">Your Goal</h2>
-                <p className="text-sm text-slate-400 mt-1">What's your primary sustainability focus?</p>
+                <p className="text-sm text-slate-400 mt-1">What&apos;s your primary sustainability focus?</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 {GOAL_OPTIONS.map((opt) => (

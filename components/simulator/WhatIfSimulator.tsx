@@ -101,7 +101,7 @@ export default function WhatIfSimulator() {
             </div>
             <div className="relative">
               <p className="text-xs text-slate-500 uppercase tracking-widest mb-4">
-                If you {result.scenarioLabel.toLowerCase()}, you'd save:
+                If you {result.scenarioLabel.toLowerCase()}, you&apos;d save:
               </p>
               <div className="grid grid-cols-3 gap-4 text-center">
                 {[

@@ -11,7 +11,7 @@ import { getLast7DaysStats, sumByCategory } from "@/lib/engine/carbonCalculator"
 import { generateInsightCard, getPreviousWeekKg } from "@/lib/engine/insightEngine";
 import { formatCo2, formatDayLabel, getCategoryEmoji, getActivityLabel, formatDate } from "@/lib/utils/formatters";
 import { GLOBAL_BENCHMARKS } from "@/lib/engine/emissionFactors";
-import type { ActivityLog } from "@/lib/types";
+import ManualLogPanel from "./ManualLogPanel";
 
 function ScoreRing({ score, level, label }: { score: number; level: string; label: string }) {
   const r = 52;
@@ -72,7 +72,7 @@ export default function Dashboard({ onGoToChat }: { onGoToChat: () => void }) {
   const profile = useCarbonStore((s) => s.profile);
   const activities = useCarbonStore((s) => s.activities);
   const badges = useCarbonStore((s) => s.badges);
-  const weeklyChallenge = useCarbonStore((s) => s.weeklyChallenge);
+
 
   const daily7 = useMemo(() => getLast7DaysStats(activities), [activities]);
 
@@ -292,6 +292,9 @@ export default function Dashboard({ onGoToChat }: { onGoToChat: () => void }) {
           )}
         </div>
       </div>
+
+      {/* Manual Logging Panel */}
+      <ManualLogPanel />
 
       {/* Badges */}
       {unlockedBadges.length > 0 && (

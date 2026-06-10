@@ -177,7 +177,7 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
   renewable_energy: {
     label: "Switch to Renewable Energy",
     description: "Switch home electricity to a renewable energy plan",
-    compute: (profile, currentWeekly, activities) => {
+    compute: (profile, currentWeekly) => {
       const monthlyKwh = profile.monthlyElectricityKwh;
       const weeklyKwh = monthlyKwh / 4.33;
       const currentFactor = ENERGY_FACTORS_BY_SOURCE[profile.energySource];
@@ -190,7 +190,7 @@ const SCENARIOS: Record<SimulatorScenarioKey, ScenarioDefinition> = {
   reduce_flights: {
     label: "Eliminate Short-Haul Flights",
     description: "Replace short flights with train travel where possible",
-    compute: (profile, currentWeekly, activities) => {
+    compute: (profile, currentWeekly) => {
       // Assume flat 10% reduction since we don't track flights in weekly
       return currentWeekly * 0.9;
     },
